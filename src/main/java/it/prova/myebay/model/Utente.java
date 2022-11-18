@@ -37,7 +37,7 @@ public class Utente {
 	@Column(name = "dateCreated")
 	private Date dateCreated;
 	@Column(name = "creditoResiduo")
-	private Integer creditoResiduo;
+	private Integer creditoResiduo = 0;
 
 	// se non uso questa annotation viene gestito come un intero
 	@Enumerated(EnumType.STRING)
@@ -57,7 +57,6 @@ public class Utente {
 	}
 
 	public Utente(String username, String password) {
-		super();
 		this.username = username;
 		this.password = password;
 	}

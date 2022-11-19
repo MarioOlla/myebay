@@ -10,8 +10,6 @@ import java.util.stream.Collectors;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-import it.prova.myebay.model.Acquisto;
-import it.prova.myebay.model.Annuncio;
 import it.prova.myebay.model.Ruolo;
 import it.prova.myebay.model.StatoUtente;
 import it.prova.myebay.model.Utente;
@@ -44,9 +42,9 @@ public class UtenteDTO {
 
 	private StatoUtente stato;
 	
-	private Set<Annuncio> annunci = new HashSet<>();
+	private Set<AnnuncioDTO> annunci = new HashSet<>();
 	
-	private Set<Acquisto> acquisti = new HashSet<>();
+	private Set<AcquistoDTO> acquisti = new HashSet<>();
 
 	private Long[] ruoliIds;
 
@@ -126,19 +124,19 @@ public class UtenteDTO {
 		this.stato = stato;
 	}
 
-	public Set<Annuncio> getAnnunci() {
+	public Set<AnnuncioDTO> getAnnunci() {
 		return annunci;
 	}
 
-	public void setAnnunci(Set<Annuncio> annunci) {
+	public void setAnnunci(Set<AnnuncioDTO> annunci) {
 		this.annunci = annunci;
 	}
 
-	public Set<Acquisto> getAcquisti() {
+	public Set<AcquistoDTO> getAcquisti() {
 		return acquisti;
 	}
 
-	public void setAcquisti(Set<Acquisto> acquisti) {
+	public void setAcquisti(Set<AcquistoDTO> acquisti) {
 		this.acquisti = acquisti;
 	}
 
@@ -186,9 +184,19 @@ public class UtenteDTO {
 	public static UtenteDTO buildUtenteDTOFromModelCompleto(Utente utenteModel, boolean includeRoles) {
 		UtenteDTO result = UtenteDTO.buildUtenteDTOFromModel(utenteModel, includeRoles);
 		result.setCreditoResiduo(utenteModel.getCreditoResiduo());
-		result.setAcquisti(utenteModel.getAcquisti());
-		result.setAnnunci(utenteModel.getAnnunci());
+		result.setAcquisti(new HashSet<AcquistoDTO>(utenteModel.getAcquisti()
+				.stream()
+				.map(acquisto -> AcquistoDTO.buildAcquistoDTOFromModel(acquisto))
+				.collect(Collectors.toSet())) 
+				);
+		result.setAnnunci(new HashSet<AnnuncioDTO>(utenteModel.getAnnunci()
+				.stream()
+				.map(annuncio -> AnnuncioDTO.buildAnnuncioDTOFromModel(annuncio))
+				.collect(Collectors.toSet()))
+				);		
 		return result;
+		
+		
 	}
 
 	public static List<UtenteDTO> createUtenteDTOListFromModelList(List<Utente> modelListInput, boolean includeRoles) {

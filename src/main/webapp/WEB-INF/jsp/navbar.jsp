@@ -1,4 +1,5 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <header>
   <!-- Fixed navbar -->
  <nav class="navbar navbar-expand-lg navbar-dark bg-primary" aria-label="Eighth navbar example">
@@ -24,6 +25,14 @@
               <li><a class="dropdown-item" href="${pageContext.request.contextPath}/home">Home</a></li>
             </ul> 
           </li>
+          <sec:authorize access="hasRole('CLASSIC_USER')">
+		      <li class="nav-item dropdown">
+		        <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">${userInfo.nome } ${userInfo.cognome }</a>
+		        <div class="dropdown-menu" aria-labelledby="dropdown01">
+		          <a class="dropdown-item" href="${pageContext.request.contextPath}/acquisto/list">Lista Acquisti</a>
+		        </div>
+		      </li>
+		   </sec:authorize>
            <sec:authorize access="hasRole('ADMIN')">
 		      <li class="nav-item dropdown">
 		        <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Gestione Utenze</a>
@@ -35,11 +44,18 @@
 		   </sec:authorize>
         </ul>
       </div>
-      <sec:authorize access="isAuthenticated()">
-	      <div class="col-md-3 text-end">
-	        <p class="navbar-text">Utente: <sec:authentication property="name"/> (${userInfo.nome } ${userInfo.cognome })
-	    	 <a href="${pageContext.request.contextPath}/logout">Logout</a></p>
-	      </div>
+
+      <sec:authorize access="!isAuthenticated()">
+      <div class="col-md-3 text-end">
+		<a  class="btn btn-primary" href="login.jsp">Login</a>
+		</div>
+	</sec:authorize>
+	<sec:authorize access="isAuthenticated()">
+		<div class="col-md-3 text-end">
+	    	<p class="navbar-text">Utente: <sec:authentication property="name"/> (${userInfo.nome } ${userInfo.cognome })
+	    		<a href="${pageContext.request.contextPath}/logout">Logout</a>
+	    	</p>
+		</div>
       </sec:authorize>
     </div>
   </nav>

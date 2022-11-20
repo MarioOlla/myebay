@@ -42,8 +42,8 @@ public class AcquistoServiceImpl implements AcquistoService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<Acquisto> findByExample(Acquisto example, Utente curr) {
-		return acquistoRepository.findByExample(example, curr);
+	public List<Acquisto> findByExample(Acquisto example) {
+		return acquistoRepository.findByExample(example);
 	}
 
 }

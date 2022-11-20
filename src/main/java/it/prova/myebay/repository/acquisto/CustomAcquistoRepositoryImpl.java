@@ -12,7 +12,6 @@ import javax.persistence.TypedQuery;
 import org.apache.commons.lang3.StringUtils;
 
 import it.prova.myebay.model.Acquisto;
-import it.prova.myebay.model.Utente;
 
 public class CustomAcquistoRepositoryImpl implements CustomAcquistoRepository{
 	
@@ -20,7 +19,7 @@ public class CustomAcquistoRepositoryImpl implements CustomAcquistoRepository{
 	private EntityManager entityManager;
 	
 	@Override
-	public List<Acquisto> findByExample(Acquisto example, Utente corrente) {
+	public List<Acquisto> findByExample(Acquisto example) {
 		Map<String, Object> parameterMap = new HashMap<String, Object>();
 		List<String> whereClauses = new ArrayList<String>();
 
@@ -40,7 +39,7 @@ public class CustomAcquistoRepositoryImpl implements CustomAcquistoRepository{
 		}
 		
 		whereClauses.add("u.id = :utente_id");
-		parameterMap.put("utente_id", corrente.getId());
+		parameterMap.put("utente_id", example.getUtenteAcquirente().getId());
 
 		queryBuilder.append(!whereClauses.isEmpty() ? " and " : "");
 		queryBuilder.append(StringUtils.join(whereClauses, " and "));

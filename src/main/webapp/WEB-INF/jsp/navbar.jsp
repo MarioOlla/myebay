@@ -29,8 +29,8 @@
 		      <li class="nav-item dropdown">
 		        <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">${userInfo.nome } ${userInfo.cognome }</a>
 		        <div class="dropdown-menu" aria-labelledby="dropdown01">
-		          <a class="dropdown-item" href="${pageContext.request.contextPath}/acquisto/list">Lista Acquisti</a>
-		        </div>
+		          <a class="dropdown-item" href="${pageContext.request.contextPath}/acquisto/myacquisti">Lista Acquisti</a>
+		        </div>	
 		      </li>
 		   </sec:authorize>
            <sec:authorize access="hasRole('ADMIN')">

@@ -20,7 +20,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import it.prova.myebay.dto.RuoloDTO;
 import it.prova.myebay.dto.UtenteDTO;
 import it.prova.myebay.model.Utente;
-import it.prova.myebay.service.AcquistoService;
 import it.prova.myebay.service.RuoloService;
 import it.prova.myebay.service.UtenteService;
 import it.prova.myebay.validation.ValidationNoPassword;
@@ -32,9 +31,6 @@ public class UtenteController {
 
 	@Autowired
 	private UtenteService utenteService;
-
-	@Autowired
-	private AcquistoService acquistoService;
 	
 	@Autowired
 	private RuoloService ruoloService;
@@ -54,9 +50,9 @@ public class UtenteController {
 	}
 
 	@PostMapping("/list")
-	public String listUtenti(Utente utenteExample, ModelMap model) {
+	public String listUtenti(UtenteDTO utenteExample, ModelMap model) {
 		model.addAttribute("utente_list_attribute",
-				UtenteDTO.createUtenteDTOListFromModelList(utenteService.findByExample(utenteExample), false));
+				UtenteDTO.createUtenteDTOListFromModelList(utenteService.findByExample(utenteExample.buildUtenteModel(false)), false));
 		return "utente/list";
 	}
 	

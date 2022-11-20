@@ -29,7 +29,11 @@ public class Acquisto {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "utente_id", nullable = false)
 	private Utente utenteAcquirente;
-
+	
+	public Acquisto() {
+		
+	}
+	
 	public Acquisto(String descrizione, Date data, Integer prezzo, Utente utenteAcquirente) {
 		this.descrizione = descrizione;
 		this.data = data;

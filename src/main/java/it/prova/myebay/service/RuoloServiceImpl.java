@@ -33,7 +33,7 @@ public class RuoloServiceImpl implements RuoloService {
 
 	@Transactional
 	public void inserisciNuovo(Ruolo ruoloInstance) {
-		ruoloRepository.save(ruoloInstance);
+		// TODO Auto-generated method stub
 	}
 
 	@Transactional
@@ -47,7 +47,7 @@ public class RuoloServiceImpl implements RuoloService {
 		return ruoloRepository.findByDescrizioneAndCodice(descrizione, codice);
 	}
 
-	@Override
+	@Transactional(readOnly = true)
 	public List<Ruolo> cercaRuoliByIds(Long[] ids) {
 		return ruoloRepository.findListByIds(ids);
 	}

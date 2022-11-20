@@ -46,13 +46,13 @@ public class CategoriaDTO {
 		return new CategoriaDTO(categoriaModel.getId(), categoriaModel.getDescrizione(), categoriaModel.getCodice());
 	}
 
-	public static List<CategoriaDTO> createRuoloDTOListFromModelSet(Set<Categoria> modelListInput) {
+	public static List<CategoriaDTO> createCategoriaDTOListFromModelSet(Set<Categoria> modelListInput) {
 		return modelListInput.stream().map(categoriaEntity -> {
 			return CategoriaDTO.buildCategoriaDTOFromModel(categoriaEntity);
 		}).collect(Collectors.toList());
 	}
 	
-	public static List<CategoriaDTO> createRuoloDTOListFromModelList(List<Categoria> modelListInput) {
+	public static List<CategoriaDTO> createCategoriaDTOListFromModelList(List<Categoria> modelListInput) {
 		return modelListInput.stream().map(categoriaEntity -> {
 			return CategoriaDTO.buildCategoriaDTOFromModel(categoriaEntity);
 		}).collect(Collectors.toList());

@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import it.prova.myebay.model.annuncio.Annuncio;
+
 @Entity
 @Table(name = "categoria")
 public class Categoria {
@@ -28,6 +30,10 @@ public class Categoria {
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "categorie")
 	private Set<Annuncio> annunci = new HashSet<>();
 
+	public Categoria(Long id) {
+		this.id=id;
+	}
+	
 	public Categoria(String descrizione, String codice) {
 		this.descrizione = descrizione;
 		this.codice = codice;

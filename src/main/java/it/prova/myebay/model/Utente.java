@@ -18,6 +18,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import it.prova.myebay.model.annuncio.Annuncio;
+
 @Entity
 @Table(name = "utente")
 public class Utente {

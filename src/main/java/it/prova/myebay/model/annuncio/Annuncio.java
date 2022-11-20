@@ -1,4 +1,4 @@
-package it.prova.myebay.model;
+package it.prova.myebay.model.annuncio;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -16,6 +16,11 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import it.prova.myebay.dto.AnnuncioDTO;
+import it.prova.myebay.dto.UtenteDTO;
+import it.prova.myebay.model.Categoria;
+import it.prova.myebay.model.Utente;
 
 @Entity
 @Table(name = "annuncio")
@@ -62,6 +67,10 @@ public class Annuncio {
 		this.aperto = aperto;
 		this.utenteInserimento = utenteInserimento;
 		this.categorie = categorie;
+	}
+
+	public Annuncio() {
+		// TODO Auto-generated constructor stub
 	}
 
 	public Long getId() {

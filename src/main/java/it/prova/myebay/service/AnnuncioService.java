@@ -18,4 +18,6 @@ public interface AnnuncioService {
 
 	public List<Annuncio> findByExample(Annuncio example);
 	
+	public void unlinkCategorieDaAnnincio(Long id);
+	
 }

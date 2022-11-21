@@ -43,12 +43,15 @@
 			        <input type="checkbox" value="remember-me"> Remember me
 			      </label>
 			    </div>
+			    <input type="hidden" name = "callerPage" id = "callerPage" value="${pageContext.request}">
 			    <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
-			    <p class="mt-5 mb-3 text-muted">&copy; 2017-2021</p>
-			  
+			    <p> <br>or<br> </p>
+			  <a href = "${pageContext.request.contextPath }/utente/autoInsert">Register</a>
 			  
 			  
 			</form>
+			
+			<p class="mt-5 mb-3 text-muted"> <a href = "${pageContext.request.contextPath }/home">Home</a> &copy; 2017-2021</p>
 		</main>
 	</body>
 </html>

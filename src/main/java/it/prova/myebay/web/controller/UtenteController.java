@@ -19,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import it.prova.myebay.dto.RuoloDTO;
 import it.prova.myebay.dto.UtenteDTO;
+import it.prova.myebay.model.StatoUtente;
 import it.prova.myebay.model.Utente;
 import it.prova.myebay.service.RuoloService;
 import it.prova.myebay.service.UtenteService;
@@ -91,6 +92,33 @@ public class UtenteController {
 
 		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
 		return "redirect:/utente";
+	}
+	
+	@GetMapping("/autoInsert")
+	public String autoCreate(Model model) {
+		model.addAttribute("insert_utente_attr", new UtenteDTO());
+		return "utente/autoinsert";
+	}
+
+	// per la validazione devo usare i groups in quanto nella insert devo validare
+	// la pwd, nella edit no
+	@PostMapping("/autoSave")
+	public String autoSave(
+			@Validated({ ValidationWithPassword.class,
+					ValidationNoPassword.class }) @ModelAttribute("insert_utente_attr") UtenteDTO utenteDTO,
+			BindingResult result, Model model, RedirectAttributes redirectAttrs) {
+
+		if (!result.hasFieldErrors("password") && !utenteDTO.getPassword().equals(utenteDTO.getConfermaPassword()))
+			result.rejectValue("confermaPassword", "password.diverse");
+
+		if (result.hasErrors()) {
+			return "utente/autoInsert";
+		}
+		utenteDTO.setStato(StatoUtente.CREATO);
+		utenteService.inserisciNuovo(utenteDTO.buildUtenteModel(true));
+
+		redirectAttrs.addFlashAttribute("successMessage", "Registrazione effettuata con successo, attendi che un aadmin ti convalidi.");
+		return "redirect:/home";
 	}
 
 	@GetMapping("/edit/{idUtente}")

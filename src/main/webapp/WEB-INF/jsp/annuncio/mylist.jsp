@@ -53,9 +53,9 @@
 										<td>${annuncioItem.utenteInserimento}</td>
 										<td>
 											<a class="btn btn-sm btn-outline-secondary" href="${pageContext.request.contextPath}/annuncio/show/${annuncioItem.id }">Visualizza</a>
-											<c:if test="${annuncioitem.aperto}">
-												<a class="btn btn-sm btn-outline-primary" href="${pageContext.request.contextPath}/annuncio/update/${annuncioItem.id }">Modifica</a>
-												<a class="btn btn-sm btn-outline-danger" href="${pageContext.request.contextPath}/annuncio/delete/${annuncioItem.id }">Delete</a>
+											<c:if test="${annuncioItem.aperto}">
+												<a class="btn btn-sm btn-outline-primary" href="${pageContext.request.contextPath}/annuncio/preUpdate/${annuncioItem.id }">Modifica</a>
+												<a class="btn btn-sm btn-outline-danger" href="${pageContext.request.contextPath}/annuncio/preDelete/${annuncioItem.id }">Delete</a>
 											</c:if>										
 										</td>
 									</tr>

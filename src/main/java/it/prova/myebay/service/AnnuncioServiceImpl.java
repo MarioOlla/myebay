@@ -46,4 +46,10 @@ public class AnnuncioServiceImpl implements AnnuncioService {
 		return annuncioRepository.findByExample(example);
 	}
 
+	@Transactional
+	public void unlinkCategorieDaAnnincio(Long id) {
+		annuncioRepository.unlinkAnnunciFromCategorie(id);
+		
+	}
+
 }

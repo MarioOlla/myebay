@@ -1,18 +1,11 @@
 package it.prova.myebay.model;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-
-import it.prova.myebay.model.annuncio.Annuncio;
 
 @Entity
 @Table(name = "categoria")
@@ -26,10 +19,11 @@ public class Categoria {
 	private String descrizione;
 	@Column(name = "codice")
 	private String codice;
-	
-	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "categorie")
-	private Set<Annuncio> annunci = new HashSet<>();
 
+	public Categoria() {
+		
+	}
+	
 	public Categoria(Long id) {
 		this.id=id;
 	}
@@ -68,14 +62,5 @@ public class Categoria {
 	public void setCodice(String codice) {
 		this.codice = codice;
 	}
-
-	public Set<Annuncio> getAnnunci() {
-		return annunci;
-	}
-
-	public void setAnnunci(Set<Annuncio> annunci) {
-		this.annunci = annunci;
-	}
-	
 	
 }

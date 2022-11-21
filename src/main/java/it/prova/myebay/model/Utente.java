@@ -93,6 +93,10 @@ public class Utente {
 		this.dateCreated = dateCreated;
 	}
 
+	public Utente( String usernameUtente) {
+		this.username = usernameUtente;
+	}
+
 	public Long getId() {
 		return id;
 	}

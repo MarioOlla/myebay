@@ -25,7 +25,7 @@ public class AnnuncioDTO {
 	
 	private Boolean aperto;
 	@NotNull(message = "{utenteInserimento.notnull")
-	private UtenteDTO utenteInserimento;
+	private String utenteInserimento;
 	
 	private Long[] categorieIds;
 	
@@ -73,11 +73,11 @@ public class AnnuncioDTO {
 		this.aperto = aperto;
 	}
 
-	public UtenteDTO getUtenteInserimento() {
+	public String getUtenteInserimento() {
 		return utenteInserimento;
 	}
 
-	public void setUtenteInserimento(UtenteDTO utenteInserimento) {
+	public void setUtenteInserimento(String utenteInserimento) {
 		this.utenteInserimento = utenteInserimento;
 	}
 
@@ -114,7 +114,7 @@ public class AnnuncioDTO {
 		return this;
 	}
 	
-	public AnnuncioDTO utenteInserimento(UtenteDTO utenteInserimento) {
+	public AnnuncioDTO utenteInserimento(String utenteInserimento) {
 		this.setUtenteInserimento(utenteInserimento);
 		return this;
 	}
@@ -131,7 +131,6 @@ public class AnnuncioDTO {
 				.prezzo(this.prezzo)
 				.data(this.data)
 				.aperto(this.aperto)
-				.utenteInserimento(this.utenteInserimento.buildUtenteModel(false))
 				.categorie( Arrays
 						.asList(this.categorieIds)
 						.stream()
@@ -144,11 +143,11 @@ public class AnnuncioDTO {
 
 	public static AnnuncioDTO buildAnnuncioDTOFromModel(Annuncio model) {
 		return new AnnuncioDTO().id(model.getId())
-				.testoAnnuncio(model.getTestoAnnuncio())
+				.testoAnnuncio((String)model.getTestoAnnuncio())
 				.prezzo(model.getPrezzo())
 				.data(model.getData())
 				.aperto(model.getAperto())
-				.utenteInserimento(UtenteDTO.buildUtenteDTOFromModel(model.getUtenteInserimento(), false))
+				.utenteInserimento(UtenteDTO.buildUtenteDTOFromModel(model.getUtenteInserimento(), false).getUsername())
 				.categorieIds(model.getCategorie().stream()
 						.map(c -> c.getId())
 						.collect(Collectors.toList())

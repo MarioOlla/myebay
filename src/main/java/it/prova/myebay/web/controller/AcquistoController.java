@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import it.prova.myebay.dto.AcquistoDTO;
@@ -27,7 +28,7 @@ public class AcquistoController {
 	private UtenteService utenteService;
 	
 	@GetMapping("/myacquisti")
-	public ModelAndView listAllAcquisti(Authentication authentication) {
+	public ModelAndView listAllAcquisti(Authentication authentication,@RequestParam(name = "successMessage") String successsMessage) {
 		String currentUserName = "";
 		if (!(authentication instanceof AnonymousAuthenticationToken)) 
 		    currentUserName = authentication.getName();	    
@@ -36,6 +37,7 @@ public class AcquistoController {
 		Utente utenteInSessione = utenteService.findByUsername(currentUserName);
 		Acquisto example = new Acquisto(null, null, null, utenteInSessione);
 		mv.addObject("list_acquisto_attr", AcquistoDTO.buildAcquistoDtoListFromModelList(acquistoService.findByExample(example)));
+		mv.addObject("successMessage",successsMessage);
 		mv.setViewName("acquisto/list");
 		return mv;
 	}

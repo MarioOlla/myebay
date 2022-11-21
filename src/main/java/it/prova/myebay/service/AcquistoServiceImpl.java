@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import it.prova.myebay.model.Acquisto;
-import it.prova.myebay.model.Utente;
 import it.prova.myebay.repository.acquisto.AcquistoRepository;
 
 @Service
@@ -33,7 +32,7 @@ public class AcquistoServiceImpl implements AcquistoService {
 
 	@Transactional
 	public void inserisciNuovo(Acquisto acquisto) {
-		acquistoRepository.save(null);		
+		acquistoRepository.save(acquisto);		
 	}
 
 	@Transactional

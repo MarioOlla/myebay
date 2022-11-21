@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -17,8 +16,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import it.prova.myebay.dto.AnnuncioDTO;
-import it.prova.myebay.dto.UtenteDTO;
 import it.prova.myebay.model.Categoria;
 import it.prova.myebay.model.Utente;
 
@@ -43,7 +40,7 @@ public class Annuncio {
 	@JoinColumn(name = "utente_id", nullable = false)
 	private Utente utenteInserimento;
 	
-	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.LAZY)
+	@ManyToMany
 	@JoinTable(name = "annuncio_categoria", joinColumns = @JoinColumn(name = "annuncio_id", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "categoria_id", referencedColumnName = "ID"))
 	private Set<Categoria> categorie = new HashSet<>();
 

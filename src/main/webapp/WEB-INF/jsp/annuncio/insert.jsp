@@ -1,4 +1,5 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <!doctype html>
 <html lang="it" class="h-100" >
@@ -54,15 +55,15 @@
 									<spring:bind path="testoAnnuncio">
 										<input type="text" name="testoAnnuncio" id="testoAnnuncio" class="form-control ${status.error ? 'is-invalid' : ''}" placeholder="Inserire il contenuto sell'annuncio" value="${insert_annuncio_attr.testoAnnuncio }" required>
 									</spring:bind>
-									<form:errors  path="nome" cssClass="error_field" />
+									<form:errors  path="testoAnnuncio" cssClass="error_field" />
 								</div>
 								
 								<div class="col-md-6">
-									<label for="prezzo" class="form-label">Cognome <span class="text-danger">*</span></label>
+									<label for="prezzo" class="form-label">Prezzo <span class="text-danger">*</span></label>
 									<spring:bind path="prezzo">
 										<input type="text" name="prezzo" id="prezzo" class="form-control ${status.error ? 'is-invalid' : ''}" placeholder="Inserire il prezzo" value="${insert_annuncio_attr.prezzo}" required>
 									</spring:bind>
-									<form:errors  path="cognome" cssClass="error_field" />
+									<form:errors  path="prezzo" cssClass="error_field" />
 								</div>
 																
 								<%--  checkbox ruoli 	--%>
@@ -84,6 +85,9 @@
 									});
 								</script>
 								<%-- fine checkbox ruoli 	--%>
+								<spring:bind path="utenteInserimento">
+									<input type="hidden" name="utenteInserimento" id="utenteInserimento" class="form-control ${status.error ? 'is-invalid' : ''}" value="<sec:authentication property="name"/>" required>
+								</spring:bind>
 								<div class="col-12">
 									<button type="submit" name="submit" value="submit" id="submit" class="btn btn-primary">Conferma</button>
 									<input class="btn btn-outline-warning" type="reset" value="Ripulisci">

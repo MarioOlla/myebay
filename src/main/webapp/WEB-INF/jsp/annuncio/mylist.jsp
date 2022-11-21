@@ -5,7 +5,7 @@
 <html lang="it" class="h-100">
 <head>
 	<jsp:include page="../header.jsp" />
-	<title>Annunci</title>
+	<title>I miei Annunci</title>
 	
 </head>
 <body class="d-flex flex-column h-100">
@@ -26,11 +26,11 @@
 			
 			<div class='card'>
 			    <div class='card-header'>
-			        <h5>Ecco la lista degli annunci</h5> 
+			        <h5>Ecco la lista degli tuoi Annunci</h5> 
 			    </div>
 			    <div class='card-body'>
-			    	<a href="${pageContext.request.contextPath}/utente/search" class='btn btn-outline-secondary' >
-				            <i class='fa fa-chevron-left'></i> Torna alla Ricerca
+			    	<a href="${pageContext.request.contextPath}/home" class='btn btn-outline-secondary' >
+				            <i class='fa fa-chevron-left'></i> Torna alla home
 				        </a>
 			    
 			        <div class='table-responsive'>
@@ -53,6 +53,10 @@
 										<td>${annuncioItem.utenteInserimento}</td>
 										<td>
 											<a class="btn btn-sm btn-outline-secondary" href="${pageContext.request.contextPath}/annuncio/show/${annuncioItem.id }">Visualizza</a>
+											<c:if test="${annuncioitem.aperto}">
+												<a class="btn btn-sm btn-outline-primary" href="${pageContext.request.contextPath}/annuncio/update/${annuncioItem.id }">Modifica</a>
+												<a class="btn btn-sm btn-outline-danger" href="${pageContext.request.contextPath}/annuncio/delete/${annuncioItem.id }">Delete</a>
+											</c:if>										
 										</td>
 									</tr>
 								</c:forEach>

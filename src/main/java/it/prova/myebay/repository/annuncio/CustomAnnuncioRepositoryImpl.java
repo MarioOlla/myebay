@@ -21,38 +21,38 @@ public class CustomAnnuncioRepositoryImpl implements CustomAnnuncioRepository {
 	
 	@Override
 	public List<Annuncio> findByExample(Annuncio example){
-		Map<String, Object> paramaterMap = new HashMap<String, Object>();
+		Map<String, Object> parameterMap = new HashMap<String, Object>();
 		List<String> whereClauses = new ArrayList<String>();
 
 		StringBuilder queryBuilder = new StringBuilder("select a from Annuncio a left join fetch a.categorie c left join fetch a.utenteInserimento u where a.id = a.id ");
 
 		if (StringUtils.isNotEmpty(example.getTestoAnnuncio())) {
 			whereClauses.add(" a.testoAnnuncio  like :testoAnnuncio ");
-			paramaterMap.put("testoAnnuncio", "%" + example.getTestoAnnuncio() + "%");
+			parameterMap.put("testoAnnuncio", "%" + example.getTestoAnnuncio() + "%");
 		}
 		if (example.getPrezzo()!=null) {
 			whereClauses.add(" a.prezzo >= :prezzo");
-			paramaterMap.put("prezzo", example.getPrezzo());
+			parameterMap.put("prezzo", example.getPrezzo());
 		}
 		if (example.getData()!=null && !example.getData().after(new Date())) {
 			whereClauses.add(" a.data >= :data ");
-			paramaterMap.put("data", example.getData());
+			parameterMap.put("data", example.getData());
 		}
 		if (example.getAperto()!= null) {
 			whereClauses.add(" a.aperto = :aperto ");
-			paramaterMap.put("aperto", example.getAperto());
+			parameterMap.put("aperto", example.getAperto());
 		}
 		if (example.getUtenteInserimento()!=null&& StringUtils.isNotEmpty(example.getUtenteInserimento().getUsername())) {
 			whereClauses.add(" u.username like :username ");
-			paramaterMap.put("username", "%"+example.getUtenteInserimento().getUsername()+"%");
+			parameterMap.put("username", "%"+example.getUtenteInserimento().getUsername()+"%");
 		}
 		
 		queryBuilder.append(!whereClauses.isEmpty() ? " and " : "");
 		queryBuilder.append(StringUtils.join(whereClauses, " and "));
 		TypedQuery<Annuncio> typedQuery = entityManager.createQuery(queryBuilder.toString(), Annuncio.class);
 
-		for (String key : paramaterMap.keySet()) {
-			typedQuery.setParameter(key, paramaterMap.get(key));
+		for (String key : parameterMap.keySet()) {
+			typedQuery.setParameter(key, parameterMap.get(key));
 		}
 
 		return typedQuery.getResultList();

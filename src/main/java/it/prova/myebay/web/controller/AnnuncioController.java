@@ -1,6 +1,6 @@
 package it.prova.myebay.web.controller;
 
-import java.util.Date;
+import java.security.Principal;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,11 +22,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import it.prova.myebay.dto.AnnuncioDTO;
 import it.prova.myebay.dto.CategoriaDTO;
-import it.prova.myebay.model.Acquisto;
 import it.prova.myebay.model.Utente;
 import it.prova.myebay.model.annuncio.Annuncio;
 import it.prova.myebay.model.annuncio.AnnuncioBuilder;
-import it.prova.myebay.service.AcquistoService;
 import it.prova.myebay.service.AnnuncioService;
 import it.prova.myebay.service.CategoriaService;
 import it.prova.myebay.service.UtenteService;
@@ -42,9 +41,6 @@ public class AnnuncioController {
 
 	@Autowired
 	private UtenteService utenteService;
-
-	@Autowired
-	private AcquistoService acquistoService;
 
 	@GetMapping("/listAll")
 	public ModelAndView listAll() {
@@ -73,19 +69,26 @@ public class AnnuncioController {
 		mv.setViewName("annuncio/list");
 		return mv;
 	}
+	
+	@GetMapping("/searchRes")
+	public String listAnnunci(AnnuncioDTO annuncioExample, ModelMap model) {
+		model.addAttribute("annuncio_list_attr",
+				AnnuncioDTO.buildAnnuncioDTOListFromModelList(annuncioService.findByExample(annuncioExample.buildAnnuncioModel())));
+		return "annuncio/list";
+	}
 
 	@GetMapping("/search")
-	public String searchAnnuncio() {
+	public String searchAnnuncio(Model model) {
+		model.addAttribute("categorie_tutte_attr",
+				CategoriaDTO.createCategoriaDTOListFromModelList(categoriaService.listAll()));
 		return "annuncio/search";
 	}
 
 	@GetMapping("/show/{idAnnuncio}")
 	public String showUtente(@PathVariable(required = true) Long idAnnuncio, Model model) {
-		Annuncio annuncioModel = annuncioService.caricaSingoloAnnuncio(idAnnuncio);
-		AnnuncioDTO result = AnnuncioDTO.buildAnnuncioDTOFromModel(annuncioModel);
-		model.addAttribute("show_annuncio_attr", result);
+		model.addAttribute("show_annuncio_attr", AnnuncioDTO.buildAnnuncioDTOFromModel(annuncioService.caricaSingoloAnnuncio(idAnnuncio)));
 		model.addAttribute("categorie_annuncio_attr", CategoriaDTO
-				.createCategoriaDTOListFromModelList(categoriaService.cercaCategorieByIds(result.getCategorieIds())));
+				.createCategoriaDTOListFromModelList(categoriaService.cercaCategorieByIds(AnnuncioDTO.buildAnnuncioDTOFromModel(annuncioService.caricaSingoloAnnuncio(idAnnuncio)).getCategorieIds())));
 		return "annuncio/show";
 	}
 
@@ -101,7 +104,6 @@ public class AnnuncioController {
 	public String save(@Validated @ModelAttribute("insert_annuncio_attr") AnnuncioDTO annuncioDTO, BindingResult result,
 			Model model, RedirectAttributes redirectAttrs, HttpServletRequest request) {
 
-		Utente utenteInserimento = utenteService.findByUsername(annuncioDTO.getUtenteInserimento());
 		if (annuncioDTO.getPrezzo() != null && annuncioDTO.getPrezzo() <= 0) {
 			model.addAttribute("categorie_tutte_attr",
 					CategoriaDTO.createCategoriaDTOListFromModelList(categoriaService.listAll()));
@@ -116,10 +118,7 @@ public class AnnuncioController {
 		}
 
 		Annuncio toInsert = annuncioDTO.buildAnnuncioModel();
-		toInsert.setUtenteInserimento(utenteInserimento);
-		toInsert.setAperto(true);
-		toInsert.setData(new Date());
-		System.out.println("sono arrivato qui");
+	
 		annuncioService.inserisciNuovo(toInsert);
 
 		redirectAttrs.addFlashAttribute("successMessage", "Inserimento nuovo annuncio avvenuto con successo");
@@ -211,47 +210,44 @@ public class AnnuncioController {
 	}
 
 	@PostMapping("/buy")
-	public String buy(@RequestParam(name = "idAnnuncioDaComprare", required = true) Long idAnnuncioDaComprare,
-			@RequestParam(name = "callerPage", required = true) String callerPage,
-			@RequestParam(name = "currentUser", required = true) String currentUserUsername,
-			RedirectAttributes redirectAttrs) {
-
-		if (currentUserUsername.isBlank()) {
-			redirectAttrs.addAttribute("redirectPage", callerPage);
-			return "utente/login";
-		}
+	public String buy(@RequestParam(required = true) Long idAnnuncioDaComprare,
+			Model model, RedirectAttributes redirectAttrs,HttpServletRequest request,Principal principal) {
 
 		Annuncio toBeBought = annuncioService.caricaSingoloAnnuncio(idAnnuncioDaComprare);
-		Utente utenteAcquirente = utenteService.findByUsername(currentUserUsername);
+		Utente utenteAcquirente = utenteService.findByUsername(principal.getName());
 
 		if (!toBeBought.getAperto()) {
 			redirectAttrs.addAttribute("errorMessage",
 					"Impossibile effettuare l'acquisto : qualcun altro ha già acquistato l'articolo di questo annuncio.");
-			return "redirect:" + callerPage;
+			return "redirect: /show/{"+idAnnuncioDaComprare+"}";
 		}
 
 		if (toBeBought.getUtenteInserimento().getId() == utenteAcquirente.getId()) {
 			redirectAttrs.addAttribute("errorMessage",
 					"Impossibile effettuare l'acquisto : questo annuncio è stato postato da te.");
-			return "redirect:" + callerPage;
+			return "redirect: /show/{"+idAnnuncioDaComprare+"}";
 		}
 
 		if (toBeBought.getPrezzo() > utenteAcquirente.getCreditoResiduo()) {
 			redirectAttrs.addAttribute("errorMessage",
 					"Impossibile effettuare l'acquisto : credito residuo insufficiente");
-			return "redirect:" + callerPage;
+			return "redirect: /show/{"+idAnnuncioDaComprare+"}";
 		}
-
-		Acquisto nuovo = new Acquisto(toBeBought.getTestoAnnuncio(), new Date(), toBeBought.getPrezzo(),
-				utenteAcquirente);
-		acquistoService.inserisciNuovo(nuovo);
-		utenteAcquirente.setCreditoResiduo(utenteAcquirente.getCreditoResiduo() - toBeBought.getPrezzo());
-		utenteService.aggiorna(utenteAcquirente);
-		toBeBought.setAperto(false);
-		annuncioService.aggiorna(toBeBought);
+		
+		annuncioService.compra( toBeBought,  utenteAcquirente);
 
 		redirectAttrs.addAttribute("successMessage", "Acquisto avvenuto con successo!");
 		return "redirect:/acquisto/myacquisti";
 	}
-
+	
+	@GetMapping("/acquistaWithoutAuth")
+	public String acquistaWithoutAuth(@RequestParam(required = true) Long idAnnuncioWithNoAuth,
+			Model model, RedirectAttributes redirectAttrs,HttpServletRequest request, Principal principal) {
+		System.out.println("maledetto   "+idAnnuncioWithNoAuth);
+		if (principal != null) {
+			return this.buy(idAnnuncioWithNoAuth, model, redirectAttrs, request, principal);
+		}
+		model.addAttribute("idAnnuncioWithNoAuth", idAnnuncioWithNoAuth);
+		return "/login";
+	}
 }

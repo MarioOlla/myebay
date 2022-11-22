@@ -88,6 +88,9 @@
 								<spring:bind path="utenteInserimento">
 									<input type="hidden" name="utenteInserimento" id="utenteInserimento" value="${ toUpdate_annuncio_attr.utenteInserimento}" required>
 								</spring:bind>
+								<spring:bind path="data">
+									<input type="hidden" name="data" id="data" value="${ toUpdate_annuncio_attr.data}" required>
+								</spring:bind>
 								<spring:bind path="aperto">
 									<input type="hidden" name="aperto" id="aperto" value="${ toUpdate_annuncio_attr.aperto}" required>
 								</spring:bind>

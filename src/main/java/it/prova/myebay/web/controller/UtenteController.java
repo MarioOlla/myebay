@@ -88,6 +88,7 @@ public class UtenteController {
 			model.addAttribute("ruoli_totali_attr", RuoloDTO.createRuoloDTOListFromModelList(ruoloService.listAll()));
 			return "utente/insert";
 		}
+		
 		utenteService.inserisciNuovo(utenteDTO.buildUtenteModel(true));
 
 		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
@@ -114,8 +115,8 @@ public class UtenteController {
 		if (result.hasErrors()) {
 			return "utente/autoInsert";
 		}
-		utenteDTO.setStato(StatoUtente.CREATO);
-		utenteService.inserisciNuovo(utenteDTO.buildUtenteModel(true));
+
+		utenteService.inserisciNuovo(utenteDTO.buildUtenteModel(true),StatoUtente.CREATO);
 
 		redirectAttrs.addFlashAttribute("successMessage", "Registrazione effettuata con successo, attendi che un aadmin ti convalidi.");
 		return "redirect:/home";

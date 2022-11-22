@@ -13,7 +13,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import it.prova.myebay.dto.AcquistoDTO;
 import it.prova.myebay.model.Acquisto;
-import it.prova.myebay.model.Utente;
 import it.prova.myebay.service.AcquistoService;
 import it.prova.myebay.service.UtenteService;
 
@@ -34,8 +33,7 @@ public class AcquistoController {
 		    currentUserName = authentication.getName();	    
 
 		ModelAndView mv = new ModelAndView();
-		Utente utenteInSessione = utenteService.findByUsername(currentUserName);
-		Acquisto example = new Acquisto(null, null, null, utenteInSessione);
+		Acquisto example = new Acquisto(null, null, null, utenteService.findByUsername(currentUserName));
 		mv.addObject("list_acquisto_attr", AcquistoDTO.buildAcquistoDtoListFromModelList(acquistoService.findByExample(example)));
 		mv.addObject("successMessage",successsMessage);
 		mv.setViewName("acquisto/list");

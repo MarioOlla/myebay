@@ -2,6 +2,7 @@ package it.prova.myebay.service;
 
 import java.util.List;
 
+import it.prova.myebay.model.Utente;
 import it.prova.myebay.model.annuncio.Annuncio;
 
 public interface AnnuncioService {
@@ -19,5 +20,7 @@ public interface AnnuncioService {
 	public List<Annuncio> findByExample(Annuncio example);
 	
 	public void unlinkCategorieDaAnnincio(Long id);
+
+	public void compra( Annuncio toBeBought, Utente utenteAcquirente);
 	
 }

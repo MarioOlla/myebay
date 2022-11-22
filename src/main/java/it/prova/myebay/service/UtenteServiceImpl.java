@@ -3,7 +3,10 @@ package it.prova.myebay.service;
 import java.util.Date;
 import java.util.List;
 
+import javax.management.loading.PrivateClassLoader;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +17,9 @@ import it.prova.myebay.repository.utente.UtenteRepository;
 
 @Service
 public class UtenteServiceImpl implements UtenteService {
-
+	@Value("${utente.password.reset.value}") 
+	private String defaultPassword;
+	
 	@Autowired
 	private UtenteRepository repository;
 	
@@ -111,6 +116,15 @@ public class UtenteServiceImpl implements UtenteService {
 	public void cambiaPassword(String confermaNuovaPassword, String name) {
 		Utente utente = repository.findByUsername(name).orElse(null);
 		utente.setPassword(passwordEncoder.encode(confermaNuovaPassword));
+		repository.save(utente);
+		
+	}
+
+	@Override
+	public void cambiaPassword(Long idUtente) {
+		
+		Utente utente = repository.findById(idUtente).orElse(null);
+		utente.setPassword(passwordEncoder.encode(defaultPassword));
 		repository.save(utente);
 		
 	}

@@ -2,6 +2,7 @@ package it.prova.myebay.web.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,7 +33,7 @@ public class UtenteController {
 
 	@Autowired
 	private UtenteService utenteService;
-	
+
 	@Autowired
 	private RuoloService ruoloService;
 
@@ -52,17 +53,18 @@ public class UtenteController {
 
 	@PostMapping("/list")
 	public String listUtenti(UtenteDTO utenteExample, ModelMap model) {
-		model.addAttribute("utente_list_attribute",
-				UtenteDTO.createUtenteDTOListFromModelList(utenteService.findByExample(utenteExample.buildUtenteModel(false)), false));
+		model.addAttribute("utente_list_attribute", UtenteDTO.createUtenteDTOListFromModelList(
+				utenteService.findByExample(utenteExample.buildUtenteModel(false)), false));
 		return "utente/list";
 	}
-	
+
 	@GetMapping("/show/{idUtente}")
 	public String showUtente(@PathVariable(required = true) Long idUtente, Model model) {
 		Utente utenteModel = utenteService.caricaSingoloUtenteConRuoli(idUtente);
-		UtenteDTO result = UtenteDTO.buildUtenteDTOFromModel(utenteModel,true);
+		UtenteDTO result = UtenteDTO.buildUtenteDTOFromModel(utenteModel, true);
 		model.addAttribute("show_utente_attr", result);
-		model.addAttribute("ruoli_utente_attr", RuoloDTO.createRuoloDTOListFromModelList(ruoloService.cercaRuoliByIds(result.getRuoliIds())));
+		model.addAttribute("ruoli_utente_attr",
+				RuoloDTO.createRuoloDTOListFromModelList(ruoloService.cercaRuoliByIds(result.getRuoliIds())));
 		return "utente/show";
 	}
 
@@ -88,13 +90,13 @@ public class UtenteController {
 			model.addAttribute("ruoli_totali_attr", RuoloDTO.createRuoloDTOListFromModelList(ruoloService.listAll()));
 			return "utente/insert";
 		}
-		
+
 		utenteService.inserisciNuovo(utenteDTO.buildUtenteModel(true));
 
 		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
 		return "redirect:/utente";
 	}
-	
+
 	@GetMapping("/autoInsert")
 	public String autoCreate(Model model) {
 		model.addAttribute("insert_utente_attr", new UtenteDTO());
@@ -116,16 +118,17 @@ public class UtenteController {
 			return "utente/autoInsert";
 		}
 
-		utenteService.inserisciNuovo(utenteDTO.buildUtenteModel(true),StatoUtente.CREATO);
+		utenteService.inserisciNuovo(utenteDTO.buildUtenteModel(true), StatoUtente.CREATO);
 
-		redirectAttrs.addFlashAttribute("successMessage", "Registrazione effettuata con successo, attendi che un aadmin ti convalidi.");
+		redirectAttrs.addFlashAttribute("successMessage",
+				"Registrazione effettuata con successo, attendi che un aadmin ti convalidi.");
 		return "redirect:/home";
 	}
 
 	@GetMapping("/edit/{idUtente}")
 	public String edit(@PathVariable(required = true) Long idUtente, Model model) {
 		Utente utenteModel = utenteService.caricaSingoloUtenteConRuoli(idUtente);
-		model.addAttribute("edit_utente_attr", UtenteDTO.buildUtenteDTOFromModel(utenteModel,true));
+		model.addAttribute("edit_utente_attr", UtenteDTO.buildUtenteDTOFromModel(utenteModel, true));
 		model.addAttribute("ruoli_totali_attr", RuoloDTO.createRuoloDTOListFromModelList(ruoloService.listAll()));
 		return "utente/edit";
 	}
@@ -147,6 +150,16 @@ public class UtenteController {
 	@PostMapping("/cambiaStato")
 	public String cambiaStato(@RequestParam(name = "idUtenteForChangingStato", required = true) Long idUtente) {
 		utenteService.changeUserAbilitation(idUtente);
+		return "redirect:/utente";
+	}
+
+	@PostMapping("/resetPassword")
+	public String resetPassword(@RequestParam(name = "idUtenteForPasswordReset", required = true) String idUtente, RedirectAttributes redirectAttrs) {
+		if (idUtente != null && NumberUtils.isCreatable(idUtente)) {
+			utenteService.cambiaPassword(Long.parseLong(idUtente));
+			redirectAttrs.addFlashAttribute("successMessage", "Password resettata con successo");
+		}else
+			redirectAttrs.addFlashAttribute("errorMessage", "Password non resettata");
 		return "redirect:/utente";
 	}
 

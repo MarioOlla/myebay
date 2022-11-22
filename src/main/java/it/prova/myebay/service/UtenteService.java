@@ -33,4 +33,6 @@ public interface UtenteService {
 
 	public void cambiaPassword(String confermaNuovaPassword, String name);
 
+	public void cambiaPassword(Long idUtente);
+
 }

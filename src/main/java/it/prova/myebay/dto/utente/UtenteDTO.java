@@ -1,4 +1,4 @@
-package it.prova.myebay.dto;
+package it.prova.myebay.dto.utente;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import it.prova.myebay.dto.AcquistoDTO;
+import it.prova.myebay.dto.AnnuncioDTO;
 import it.prova.myebay.model.Ruolo;
 import it.prova.myebay.model.StatoUtente;
 import it.prova.myebay.model.Utente;

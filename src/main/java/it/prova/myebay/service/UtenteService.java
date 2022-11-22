@@ -31,4 +31,6 @@ public interface UtenteService {
 	
 	public Utente findByUsername(String username);
 
+	public void cambiaPassword(String confermaNuovaPassword, String name);
+
 }

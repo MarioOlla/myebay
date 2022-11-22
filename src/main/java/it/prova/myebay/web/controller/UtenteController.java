@@ -18,7 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import it.prova.myebay.dto.RuoloDTO;
-import it.prova.myebay.dto.UtenteDTO;
+import it.prova.myebay.dto.utente.UtenteDTO;
 import it.prova.myebay.model.StatoUtente;
 import it.prova.myebay.model.Utente;
 import it.prova.myebay.service.RuoloService;

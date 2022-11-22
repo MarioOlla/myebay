@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import it.prova.myebay.dto.utente.UtenteDTO;
 import it.prova.myebay.model.Categoria;
 import it.prova.myebay.model.annuncio.Annuncio;
 import it.prova.myebay.model.annuncio.AnnuncioBuilder;
